@@ -5,8 +5,8 @@ var template = `
     display: inline-grid;
     border: 1px solid silver;
   }
-  .drawer {
-    position: relative;
+  #drawer {
+    cursor: pointer;
   }
   .selectedRow {
     color: white;
@@ -102,9 +102,10 @@ class TextboxWithDropdown extends HTMLElement {
   }  
 
   filterWords(prefix) {
+    prefix = prefix.toLowerCase();
     var result = [];
     for(var i=0; i < this.dictionary.length;i ++) {
-      var wordArray = this.dictionary[i];
+      var wordArray = this.dictionary[i].toLowerCase();
       for(var j=0; j < prefix.length && j < wordArray.length; j ++) {
         if(prefix[j] != wordArray[j]) {
           break;
