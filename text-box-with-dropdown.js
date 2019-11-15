@@ -103,7 +103,6 @@ class TextboxWithDropdown extends HTMLElement {
       this.selectHighlight(i);
     }.bind(this));
     row.addEventListener("click", function(e) {
-      //this._shadowRoot.getElementById('textfield').value = row.innerText;
       this.rowSelected(e);
     }.bind(this));
   }.bind(this));
