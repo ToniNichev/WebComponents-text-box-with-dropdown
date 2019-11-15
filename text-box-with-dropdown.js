@@ -40,7 +40,6 @@ class TextboxWithDropdown extends HTMLElement {
 
   connectedCallback() {
     // and when the component is mounted, do the rest to make it work
-    this.dictionary = [];
     this.selectedIndex = 0;
     this.filteredWordsCount = 0;
     this.isDrawerOpen = false;
