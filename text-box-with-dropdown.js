@@ -17,10 +17,6 @@ var template = `
     margin: 1px;
     border-bottom: 1px solid silver;
   }
-  p:hover {
-    color: white;
-    background: #606062;
-  }
   p:last-child {
     border-bottom: none;
   }  
@@ -32,7 +28,6 @@ var template = `
   </div>
 </div>
 `;
-
 
 class TextboxWithDropdown extends HTMLElement {  
 
@@ -73,11 +68,16 @@ class TextboxWithDropdown extends HTMLElement {
     //Custom square element attributes changed.
     this.dictionary = newValue.split(',');
   }
-  
+
+  selectHighlight(i) {
+    this._shadowRoot.getElementById('row-' + this.selectedIndex).classList.remove("selectedRow");
+    this._shadowRoot.getElementById('row-' + i).classList.add("selectedRow");
+    this.selectedIndex = i;
+  }
 
   keyUp(e) {
   if(e.keyCode == 13) {
-    this.enterKeyPressed(e);
+    this.rowSelected(e);
     return;
   }
   if(e.keyCode == '38' || e.keyCode == '40') {
@@ -99,8 +99,12 @@ class TextboxWithDropdown extends HTMLElement {
   var c = 0;
   words.map(function(row, i) {
     var row = this._shadowRoot.getElementById('row-' + i);
-    row.addEventListener("click", function() {
-      this._shadowRoot.getElementById('textfield').value = row.innerText;
+    row.addEventListener("mousemove", function() {
+      this.selectHighlight(i);
+    }.bind(this));
+    row.addEventListener("click", function(e) {
+      //this._shadowRoot.getElementById('textfield').value = row.innerText;
+      this.rowSelected(e);
     }.bind(this));
   }.bind(this));
   // select first row if any
@@ -112,9 +116,11 @@ arrowUpDown(e) {
   if(this.selectedIndex > -1)
     this._shadowRoot.getElementById('row-' + this.selectedIndex).classList.remove("selectedRow");    
   if(e.keyCode == '38' && this.selectedIndex > 0) {
+    // arrow up
     this.selectedIndex --;
   }
   else if(e.keyCode == '40' && this.selectedIndex < this.filteredWordsCount - 1) {
+    // arrow down
     this.selectedIndex ++;
   }
   this._shadowRoot.getElementById('row-' + this.selectedIndex).classList.add("selectedRow");
@@ -122,7 +128,7 @@ arrowUpDown(e) {
   return false;
 }
 
-enterKeyPressed(e) {
+rowSelected(e) {
   if(this.filteredWordsCount == 0)
     return;
   this._shadowRoot.getElementById('textfield').value = this._shadowRoot.getElementById('row-' + this.selectedIndex).innerText;
